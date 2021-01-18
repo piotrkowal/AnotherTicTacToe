@@ -1,10 +1,12 @@
 package pl.AnotherTicTacToe;
 
+import pl.AnotherTicTacToe.Controllers.GameController;
+
 public class TicTacToeStartingPoint {
 
 	public static void main(String[] args) {
 		
-		System.out.println("Hello World!");
+		GameController newgame = new GameController();
 	}
 
 }
