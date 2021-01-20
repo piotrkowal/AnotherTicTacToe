@@ -11,4 +11,12 @@ public interface IGameBoard {
 	void addNumCoord(int number, Map<String, Integer> coordsToAdd);
 
 	void addAvailableNum(int newNumber);
+
+	String[][] getBoard();
+
+	boolean isNumAvailable(int num);
+
+	void filterOutAvailableNums(int numToFilterOut);
+
+	 Map<String, Integer> getCoords(int num);
 }

@@ -1,5 +1,6 @@
 package pl.AnotherTicTacToe.Models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,11 +15,16 @@ public class GameBoard implements IGameBoard {
 	public GameBoard() {
 		this.size = 3;
 		this.gameBoard = new String[size][size];
+		this.availableNums = new ArrayList<Integer>();
 		this.coordsOfNum = new HashMap<Integer, Map<String, Integer>>();
 	}
 
 	public int getSize() {
 		return this.size;
+	}
+	
+	public String[][] getBoard(){
+		return this.gameBoard;
 	}
 
 	public void addAvailableNum(int newNumber) {
@@ -30,7 +36,7 @@ public class GameBoard implements IGameBoard {
 	}
 
 	public boolean isNumAvailable(int num) {
-		return this.availableNums.indexOf(num) == -1;
+		return !(this.availableNums.indexOf(num) == -1);
 	}
 
 	public boolean isAnyNumAvailable() {
@@ -49,5 +55,8 @@ public class GameBoard implements IGameBoard {
 	public void addNumCoord(int number, Map<String, Integer> coordsToAdd) {
 		this.coordsOfNum.put(number, coordsToAdd);
 	}
-
+	public Map<String, Integer> getCoords(int num){
+		return this.coordsOfNum.get(num);
+	}
+	
 }
