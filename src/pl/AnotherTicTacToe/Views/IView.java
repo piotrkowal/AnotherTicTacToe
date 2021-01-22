@@ -9,4 +9,6 @@ public interface IView {
 	void showBoard(String[][] gameBoard);
 
 	void showNextPlayer(List<IPlayerStatus> players);
+
+	void showTheWinner(String winnersName);
 }

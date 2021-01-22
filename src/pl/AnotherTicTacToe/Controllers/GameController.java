@@ -22,13 +22,14 @@ public class GameController {
 	private boolean isEndgame;
 	private Scanner playerChoiceReader;
 	private String WinnersName;
+
 	public GameController() {
 		this.GameView = new DefaultView();
 		this.Players = new ArrayList<IPlayerStatus>();
 		this.Board = new GameBoard();
 		this.playerChoiceReader = new Scanner(System.in);
 		this.isEndgame = false;
-		this.WinnersName = ""; 
+		this.WinnersName = "";
 		this.Players.add(new DefaultPlayerStatus("First", "X"));
 		this.Players.add(new DefaultPlayerStatus("Sec", "O"));
 	}
@@ -57,10 +58,15 @@ public class GameController {
 			this.updateBoard(playerChoice, playerSign);
 
 			this.checkIfGameEnded();
+			this.changePlayer();
 		}
 
+		this.GameView.showTheWinner(this.WinnersName);
 		this.GameView.showBoard(this.Board.getBoard());
+	}
 
+	private void changePlayer() {
+		this.Players.forEach(player -> player.setCurrentPlayer(!player.getCurrentPlayer()));
 	}
 
 	private void checkIfGameEnded() {
@@ -76,10 +82,10 @@ public class GameController {
 					&& this.Board.getBoardCell(i, 1).equals(this.Board.getBoardCell(i, 2)));
 		}
 
-		hasMatch = hasMatch || (this.Board.getBoardCell(0,0).equals(this.Board.getBoardCell(1,1))
-				&& this.Board.getBoardCell(1,1).equals(this.Board.getBoardCell(2,2)));
-		hasMatch = hasMatch || (this.Board.getBoardCell(0,2).equals(this.Board.getBoardCell(1,1)) 
-				&& this.Board.getBoardCell(1,1).equals(this.Board.getBoardCell(2,0)));
+		hasMatch = hasMatch || (this.Board.getBoardCell(0, 0).equals(this.Board.getBoardCell(1, 1))
+				&& this.Board.getBoardCell(1, 1).equals(this.Board.getBoardCell(2, 2)));
+		hasMatch = hasMatch || (this.Board.getBoardCell(0, 2).equals(this.Board.getBoardCell(1, 1))
+				&& this.Board.getBoardCell(1, 1).equals(this.Board.getBoardCell(2, 0)));
 
 		if (hasMatch || !this.Board.isAnyNumAvailable()) {
 			this.isEndgame = true;

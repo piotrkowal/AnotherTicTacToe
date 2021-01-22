@@ -25,5 +25,12 @@ public class DefaultView implements IView{
 		System.out.println(nextPlayer+"'s turn!");
 	}
 
-	
+	@Override
+	public void showTheWinner(String winnersName) {
+		if(winnersName.length()<1) {
+			System.out.println("All cells have been marked; No one wins!");
+		} else {
+			System.out.println("Player " + winnersName + " wins!");
+		}
+	}
 }
