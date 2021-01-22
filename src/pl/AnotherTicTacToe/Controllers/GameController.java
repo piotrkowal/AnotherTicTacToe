@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import pl.AnotherTicTacToe.Models.DefaultPlayerStatus;
 import pl.AnotherTicTacToe.Models.GameBoard;
@@ -27,13 +29,14 @@ public class GameController {
 		this.playerChoiceReader = new Scanner(System.in);
 		this.isEndgame = false;
 
-		this.Players.add(new DefaultPlayerStatus("First"));
+		this.Players.add(new DefaultPlayerStatus("First", "X"));
 		this.Players.add(new DefaultPlayerStatus("Sec", "O"));
 	}
 
 	public void GameLoop() {
 
 		this.setUpBoard();
+		this.chooseWhoStarts();
 
 		while (!this.isEndGame()) {
 			this.GameView.showNextPlayer(this.Players);
@@ -48,18 +51,36 @@ public class GameController {
 			}
 
 			this.Board.filterOutAvailableNums(playerChoice);
-			this.isEndgame = true;
+
+			String playerSign = this.Players.stream().filter(status -> status.getCurrentPlayer())
+					.map(status -> status.GetPlayerSymbol()).collect(Collectors.joining());
+			this.updateBoard(playerChoice, playerSign);
 		}
 
 		this.GameView.showBoard(this.Board.getBoard());
 
 	}
 
-	private void updateBoard(int playerChoice, IPlayerStatus playerStatus) {
+	private void chooseWhoStarts() {
+		int randomNum = ThreadLocalRandom.current().nextInt(0, 2);
+
+		for (int i = 0; i < this.Players.size(); i++) {
+			IPlayerStatus tmpPlayer = this.Players.get(i);
+			if (randomNum == i) {
+				tmpPlayer.setCurrentPlayer(true);
+			} else {
+				tmpPlayer.setCurrentPlayer(false);
+			}
+
+			this.Players.set(i, tmpPlayer);
+		}
+	}
+
+	private void updateBoard(int playerChoice, String playerSign) {
 		Map<String, Integer> cellCoordsToUpdate = this.Board.getCoords(playerChoice);
 		int xCoord = cellCoordsToUpdate.get("x");
 		int yCoord = cellCoordsToUpdate.get("y");
-		this.Board.setBoardCell(xCoord, yCoord, playerStatus.GetPlayerSymbol());
+		this.Board.setBoardCell(xCoord, yCoord, playerSign);
 	}
 
 	private void setUpBoard() {
