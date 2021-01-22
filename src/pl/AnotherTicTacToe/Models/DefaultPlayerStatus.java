@@ -28,4 +28,16 @@ public class DefaultPlayerStatus implements IPlayerStatus {
 		return this.Sign;
 	}
 
+	@Override
+	public void setCurrentPlayer(boolean isCurrent) {
+		// TODO Auto-generated method stub
+		this.isCurrentPlayer = isCurrent;
+	}
+
+	@Override
+	public boolean getCurrentPlayer() {
+		// TODO Auto-generated method stub
+		return this.isCurrentPlayer;
+	}
+
 }
