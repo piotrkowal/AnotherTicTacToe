@@ -21,14 +21,14 @@ public class GameController {
 	private ArrayList<IPlayerStatus> Players;
 	private boolean isEndgame;
 	private Scanner playerChoiceReader;
-
+	private String WinnersName;
 	public GameController() {
 		this.GameView = new DefaultView();
 		this.Players = new ArrayList<IPlayerStatus>();
 		this.Board = new GameBoard();
 		this.playerChoiceReader = new Scanner(System.in);
 		this.isEndgame = false;
-
+		this.WinnersName = ""; 
 		this.Players.add(new DefaultPlayerStatus("First", "X"));
 		this.Players.add(new DefaultPlayerStatus("Sec", "O"));
 	}
@@ -55,10 +55,40 @@ public class GameController {
 			String playerSign = this.Players.stream().filter(status -> status.getCurrentPlayer())
 					.map(status -> status.GetPlayerSymbol()).collect(Collectors.joining());
 			this.updateBoard(playerChoice, playerSign);
+
+			this.checkIfGameEnded();
 		}
 
 		this.GameView.showBoard(this.Board.getBoard());
 
+	}
+
+	private void checkIfGameEnded() {
+		boolean hasMatch = false;
+
+		for (int j = 0; j < this.Board.getSize(); j++) {
+			hasMatch = hasMatch || (this.Board.getBoardCell(0, j).equals(this.Board.getBoardCell(1, j))
+					&& this.Board.getBoardCell(1, j).equals(this.Board.getBoardCell(2, j)));
+		}
+
+		for (int i = 0; i < this.Board.getSize(); i++) {
+			hasMatch = hasMatch || (this.Board.getBoardCell(i, 0).equals(this.Board.getBoardCell(i, 1))
+					&& this.Board.getBoardCell(i, 1).equals(this.Board.getBoardCell(i, 2)));
+		}
+
+		hasMatch = hasMatch || (this.Board.getBoardCell(0,0).equals(this.Board.getBoardCell(1,1))
+				&& this.Board.getBoardCell(1,1).equals(this.Board.getBoardCell(2,2)));
+		hasMatch = hasMatch || (this.Board.getBoardCell(0,2).equals(this.Board.getBoardCell(1,1)) 
+				&& this.Board.getBoardCell(1,1).equals(this.Board.getBoardCell(2,0)));
+
+		if (hasMatch || !this.Board.isAnyNumAvailable()) {
+			this.isEndgame = true;
+		}
+
+		if (hasMatch && this.Board.isAnyNumAvailable()) {
+			this.WinnersName = this.Players.stream().filter(status -> status.getCurrentPlayer())
+					.map(status -> status.GetPlayerName()).collect(Collectors.joining());
+		}
 	}
 
 	private void chooseWhoStarts() {

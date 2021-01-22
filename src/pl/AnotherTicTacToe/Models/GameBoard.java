@@ -48,6 +48,10 @@ public class GameBoard implements IGameBoard {
 				.collect(Collectors.toList());
 	}
 
+	public String getBoardCell(int x, int y) {
+		return this.gameBoard[x][y];
+	}
+	
 	public void setBoardCell(int x, int y, String value) {
 		this.gameBoard[x][y] = value;
 	}
